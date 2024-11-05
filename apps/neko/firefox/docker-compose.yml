@@ -1,0 +1,23 @@
+services:
+  neko:
+    image: m1k1o/neko:firefox
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    networks:
+      - 1panel-network
+    shm_size: '2gb'
+    ports:
+      - '${PANEL_APP_PORT_HTTP}:8080' # 使用38080端口，如果冲突了可以换
+      - '${PANEL_NEKO_UDP_PORT}:52000-52100/udp'
+    environment:
+      NEKO_SCREEN: 1920x1080@30
+      NEKO_PASSWORD: ${PANEL_NEKO_PASSWORD} # 普通用户密码
+      NEKO_PASSWORD_ADMIN: ${PANEL_NEKO_PASSWORD_ADMIN} # 管理员密码
+      NEKO_EPR: ${PANEL_NEKO_UDP_PORT}
+      NEKO_ICELITE: 1
+      NEKO_FILE_TRANSFER_ENABLED: true
+    labels:
+      createdBy: 'Apps'
+networks:
+  1panel-network:
+    external: true

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "gitIgnoredAuthors": [
+    "githubaction@githubaction.com"
+  ],
+  "rebaseWhen": "never",
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "docker-compose"
+      ],
+      "automerge": true
+    },
+    {
+      "matchFileNames": [
+        "apps/neko/firefox/*.yml"
+      ],
+      "allowedVersions": "firefox"
+    }
+  ],
+  "prCreation": "immediate"
+}

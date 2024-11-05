@@ -1,0 +1,33 @@
+additionalProperties:
+  formFields:
+    - default: 38080
+      edit: true
+      envKey: PANEL_APP_PORT_HTTP
+      labelEn: Port
+      labelZh: 端口
+      required: true
+      rule: paramPort
+      type: number
+    - default: neko
+      envKey: PANEL_NEKO_PASSWORD
+      labelEn: neko password
+      labelZh: 普通用户密码
+      random: true
+      required: true
+      rule: paramComplexity
+      type: password
+    - default: neko
+      envKey: PANEL_NEKO_PASSWORD_ADMIN
+      labelEn: neko admin password
+      labelZh: 管理员密码
+      random: true
+      required: true
+      rule: paramComplexity
+      type: password
+    - default: '52000-52100'
+      disabled: true
+      envKey: PANEL_NEKO_UDP_PORT
+      labelEn: udp Port
+      labelZh: udp端口
+      required: true
+      type: text
