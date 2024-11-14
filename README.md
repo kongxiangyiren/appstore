@@ -7,9 +7,6 @@ cd apps
 
 ## 使用
 
-```sh
-rm -r /opt/1panel/resource/apps/local
-```
 
 ```sh
 git clone https://gitee.com/kongxiangyiren/appstore /opt/1panel/resource/apps/local/appstore-localApps
