@@ -1,0 +1,31 @@
+additionalProperties:
+  formFields:
+    - default: http://gitea:3000
+      edit: true
+      envKey: GITEA_INSTANCE_URL
+      labelEn: Gitea Instance
+      labelZh: Gitea 实例
+      required: true
+      rule: paramExtUrl
+      type: text
+    - default: '<registration_token>'
+      edit: true
+      envKey: RUNNER_REGISTRATION_TOKEN
+      labelEn: Registration Token
+      labelZh: Registration Token
+      required: true
+      type: text
+    - default: 'ubuntu-latest'
+      edit: true
+      envKey: RUNNER_NAME
+      labelEn: Runner Name
+      labelZh: Runner Name
+      required: true
+      type: text
+    - default: 'ubuntu-latest:docker://gitea/runner-images:ubuntu-latest'
+      edit: true
+      envKey: RUNNER_LABELS
+      labelEn: Runner Labels
+      labelZh: Runner Labels
+      required: true
+      type: text
