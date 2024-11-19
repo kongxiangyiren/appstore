@@ -8,6 +8,10 @@
   ],
   "rebaseWhen": "never",
   "packageRules": [
+     {
+      "matchDatasources": ["docker"],
+      "registryUrls": ["https://docker.1panel.live/"]
+    },
     {
       "matchPackageNames": [
         "docker-compose"
