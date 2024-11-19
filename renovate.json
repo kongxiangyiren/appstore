@@ -1,27 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "gitIgnoredAuthors": [
-    "githubaction@githubaction.com"
-  ],
+  "extends": ["config:recommended"],
+  "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "packageRules": [
-     {
+    {
       "matchDatasources": ["docker"],
       "registryUrls": ["https://docker.1panel.live/"]
     },
     {
-      "matchPackageNames": [
-        "docker-compose"
-      ],
+      "matchPackageNames": ["docker-compose"],
       "automerge": true
     },
     {
-      "matchFileNames": [
-        "apps/neko/firefox/*.yml"
-      ],
+      "matchFileNames": ["apps/neko/firefox/*.yml"],
       "allowedVersions": "firefox"
     }
   ],
