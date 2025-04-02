@@ -1,0 +1,18 @@
+additionalProperties:
+  formFields:
+    - default: 8002
+      edit: true
+      envKey: PANEL_APP_PORT_HTTP
+      labelEn: Port
+      labelZh: 端口
+      required: true
+      rule: paramPort
+      type: number
+    - default: ./data/media
+      edit: true
+      envKey: MEDIA_PATH
+      labelEn: Media Path
+      labelZh: 媒体路径
+      required: true
+      type: text
+

@@ -1,7 +1,7 @@
 {
   "window.commandCenter": false,
-  // 设置window默认终端为 Ubuntu-24.04 (WSL)
-  "terminal.integrated.defaultProfile.windows": "Ubuntu-24.04 (WSL)",
+  // 设置window默认终端为 Ubuntu-22.04 (WSL)
+  "terminal.integrated.defaultProfile.windows": "Ubuntu-22.04 (WSL)",
   // 设置终端打开的默认目录为工作目录
   "terminal.integrated.cwd": "${workspaceFolder}/apps",
   // 设置默认格式化程序为 Prettier
