@@ -15,6 +15,10 @@
     {
       "matchFileNames": ["apps/neko/firefox/*.yml"],
       "allowedVersions": "firefox"
+    },
+    {
+      "matchFileNames": ["apps/music-tag-web/2.*/*.yml"],
+      "allowedVersions": "/^2.*/"
     }
   ],
   "prCreation": "immediate"
