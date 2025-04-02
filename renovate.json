@@ -19,6 +19,10 @@
     {
       "matchFileNames": ["apps/music-tag-web/2.*/*.yml"],
       "allowedVersions": "/^2.*/"
+    },
+    {
+      "matchFileNames": ["apps/act_runner/0.*/*.yml"],
+      "allowedVersions": "/^0.*/"
     }
   ],
   "prCreation": "immediate"
