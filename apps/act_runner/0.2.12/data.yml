@@ -22,7 +22,7 @@ additionalProperties:
       labelZh: Runner Name
       required: true
       type: text
-    - default: 'ubuntu-latest:docker://gitea/runner-images:ubuntu-latest'
+    - default: 'ubuntu-latest:docker://docker.gitea.com/runner-images:ubuntu-latest'
       edit: true
       envKey: RUNNER_LABELS
       labelEn: Runner Labels
