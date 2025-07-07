@@ -15,7 +15,6 @@ additionalProperties:
     limit: 0
     recommend: 0
     website: https://www.bitcomet.com/
-    github: https://github.com/qbittorrent/qBittorrent
     document: https://wiki-zh.bitcomet.com/
     description:
         en: BitComet is a free BitTorrent download client!
