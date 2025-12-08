@@ -1,6 +1,6 @@
 services:
   music-tag:
-    image: xhongc/music_tag_web:2.6.5
+    image: xhongc/music_tag_web:2.6.6
     container_name: ${CONTAINER_NAME}
     ports:
       - ${PANEL_APP_PORT_HTTP}:8002
