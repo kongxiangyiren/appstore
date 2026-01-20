@@ -5,6 +5,10 @@
   "rebaseWhen": "never",
   "packageRules": [
     {
+      "matchPackageNames": ["github-actions"],
+      "enabled": false
+    },
+    {
       "matchDatasources": ["docker"],
       "registryUrls": ["https://docker.1ms.run/"]
     },
