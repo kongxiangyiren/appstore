@@ -100,6 +100,12 @@ container:
   require_docker: false
   # Timeout to wait for the docker daemon to be reachable, if docker is required by require_docker or act_runner
   docker_timeout: 0s
+  # Bind the workspace to the host filesystem instead of using Docker volumes.
+  # This is required for Docker-in-Docker (DinD) setups when jobs use docker compose
+  # with bind mounts (e.g., ".:/app"), as volume-based workspaces are not accessible
+  # from the DinD daemon's filesystem. When enabled, ensure the workspace parent
+  # directory is also mounted into the runner container and listed in valid_volumes.
+  bind_workdir: false
 
 host:
   # The parent directory of a job's working directory.
