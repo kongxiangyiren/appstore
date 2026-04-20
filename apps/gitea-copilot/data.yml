@@ -1,0 +1,21 @@
+additionalProperties:
+  key:  gitea_copilot  #应用的 key ，仅限英文，用于在 Linux 创建文件夹
+  name: Gitea Copilot  #应用名称
+  tags:
+    - DevOps #应用标签，可以有多个，请参照下方的标签列表
+  shortDescZh: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。 #应用中文描述，不要超过30个字
+  shortDescEn: An intelligent assistant for Gitea based on LLM, capable of automatically performing code reviews, tagging, and answering questions based on project documentation. #应用英文描述
+  type: tool  #应用类型，区别于应用分类，只能有一个，请参照下方的类型列表
+  crossVersionUpdate: true  #是否可以跨大版本升级
+  limit: 0 #应用安装数量限制，0 代表无限制
+  website: https://github.com/kekxv/gitea-copilot #官网地址
+  github: https://github.com/kekxv/gitea-copilot #github 地址
+  description:
+    en: An intelligent assistant for Gitea based on LLM, capable of automatically performing code reviews, tagging, and answering questions based on project documentation. #应用英文描述
+    zh: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。 #应用中文描述，不要超过30个字
+    zh-Hant: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。 #应用中文描述，不要超过30个字
+    ja: Giteaに基づくLLMのインテリジェントアシスタントで、コードレビューの自動実行、タグ付け、プロジェクトドキュメントに基づく質問への回答などが可能です。 #应用日文描述，不要超过30个字
+    ms: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。
+    pt-br: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。
+    ru: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。
+    ko: 一个基于 LLM 的 Gitea 智能助手，能够自动执行代码审查（Code Review）、打标签、根据项目文档回答问题等任务。
