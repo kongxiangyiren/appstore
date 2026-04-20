@@ -1,5 +1,5 @@
 additionalProperties:
-  key:  gitea_copilot  #应用的 key ，仅限英文，用于在 Linux 创建文件夹
+  key:  gitea-copilot  #应用的 key ，仅限英文，用于在 Linux 创建文件夹
   name: Gitea Copilot  #应用名称
   tags:
     - DevOps #应用标签，可以有多个，请参照下方的标签列表
