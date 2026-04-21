@@ -5,7 +5,7 @@ additionalProperties:
     - Media #应用标签，可以有多个，请参照下方的标签列表
   shortDescZh: 属于你的远程浏览器 可多人协作 #应用中文描述，不要超过30个字
   shortDescEn: Your remote browser can be collaborated by many people. #应用英文描述
-  type: tool #应用类型，区别于应用分类，只能有一个，请参照下方的类型列表
+  type: website #应用类型，区别于应用分类，只能有一个，请参照下方的类型列表
   crossVersionUpdate: true #是否可以跨大版本升级
   limit: 1 #应用安装数量限制，0 代表无限制
   website: https://neko.m1k1o.net/#/ #官网地址
