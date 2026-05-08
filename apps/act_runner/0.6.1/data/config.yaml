@@ -35,7 +35,7 @@ runner:
   # The maximum interval for fetching the job from the Gitea instance.
   # The runner uses exponential backoff when idle, increasing the interval up to this maximum.
   # Set to 0 or same as fetch_interval to disable backoff.
-  fetch_interval_max: 60s
+  fetch_interval_max: 5s
   # The base interval for periodic log flush to the Gitea instance.
   # Logs may be sent earlier if the buffer reaches log_report_batch_size
   # or if log_report_max_latency expires after the first buffered row.
@@ -60,7 +60,10 @@ runner:
   # Find more images provided by Gitea at https://gitea.com/gitea/runner-images .
   # If it's empty when registering, it will ask for inputting labels.
   # If it's empty when execute `daemon`, will use labels in `.runner` file.
-  labels: []
+  labels:
+    - "ubuntu-latest:docker://docker.gitea.com/runner-images:ubuntu-latest"
+    - "ubuntu-24.04:docker://docker.gitea.com/runner-images:ubuntu-24.04"
+    - "ubuntu-22.04:docker://docker.gitea.com/runner-images:ubuntu-22.04"
 
 cache:
   # Enable cache server to use actions/cache.
@@ -78,7 +81,12 @@ cache:
   # The external cache server URL. Valid only when enable is true.
   # If it's specified, act_runner will use this URL as the ACTIONS_CACHE_URL rather than start a server by itself.
   # The URL should generally end with "/".
+  # Requires external_secret below to be set to the same value on both this runner and the cache-server.
   external_server: ""
+  # Shared secret between this runner and the external `act_runner cache-server`. Required when external_server
+  # (or `act_runner cache-server`) is in use: the runner pre-registers each job's ACTIONS_RUNTIME_TOKEN with the
+  # cache-server, and the cache-server enforces bearer auth + per-repo cache isolation.
+  external_secret: ""
 
 container:
   # Specifies the network to which the container will connect.
