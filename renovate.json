@@ -3,6 +3,7 @@
   "extends": ["config:recommended"],
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
+  "automerge": true,
   "packageRules": [
     {
       "matchPackageNames": ["github-actions"],
