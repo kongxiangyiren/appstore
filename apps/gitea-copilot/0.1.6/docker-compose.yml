@@ -1,6 +1,6 @@
 services:
   gitea-copilot:
-    image: ghcr.io/kekxv/gitea-copilot:v0.1.6
+    image: ghcr.io/kekxv/gitea-copilot:v0.1.7
     volumes:
       - ./data:/app/data
     ports:
