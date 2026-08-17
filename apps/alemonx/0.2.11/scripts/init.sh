@@ -1,4 +1,4 @@
 #!/bin/bash
 
-mkdir -p ./data
-chmod -R 777 ./data
+mkdir data
+chown -R 1000:1000 data
