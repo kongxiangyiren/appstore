@@ -3,82 +3,97 @@ permissions:
   contents: write
   pull-requests: write
 on:
-  push:
-    branches: [ 'dependabot/*' ]
-  workflow_dispatch:
-    inputs:
-      manual-trigger:
-        description: 'Manually trigger Dependabot'
-        default: ''
+  pull_request_target:
+    types: [opened, reopened, closed]
+
 jobs:
-  update-app-version:
+  # Dependabot 分支(dependabot/**)不允许外部推送提交,因此无法像 Renovate
+  # 那样先把目录重命名提交推到 PR 分支再合并。改为:PR 创建后直接自动合并,
+  # 合并完成后再在主分支上同步版本目录并推送重命名提交。
+  auto-merge:
+    name: Auto-merge Dependabot PR
     runs-on: ubuntu-latest
+    if: >-
+      github.event.action != 'closed' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      startsWith(github.head_ref, 'dependabot/')
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Configure repo
-        run: |
-          git config --local user.email "githubaction@githubaction.com"
-          git config --local user.name "github-action update-app-version"
-
-      - name: Get list of updated files by the last commit in this branch separated by space
-        id: updated-files
-        run: |
-          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | tr '\n' ' ')"
-
-      - name: Run dependabot-app-version.sh on merged files
-        run: |
-          IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
-
-          for file in "${files[@]}"; do
-            if [[ $file == *"docker-compose.yml"* ]]; then
-              app_name=$(echo $file | cut -d'/' -f 2)
-              old_version=$(echo $file | cut -d'/' -f 3)
-              chmod +x .github/workflows/dependabot-app-version.sh
-              .github/workflows/dependabot-app-version.sh $app_name $old_version
-            fi
-          done
-
-      - name: Commit & Push Changes
-        run: |
-          IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
-
-          for file in "${files[@]}"; do
-            if [[ $file == *"docker-compose.yml"* ]]; then
-              app_name=$(echo $file | cut -d'/' -f 2)
-              git add "apps/$app_name/*" && git commit -m "Update app version [skip ci]" --no-verify && git push || true
-            fi
-          done
-
-      - name: Auto-merge Dependabot PR
-        if: startsWith(github.ref, 'refs/heads/dependabot/')
+      - name: Merge or enable auto-merge
         env:
           GH_TOKEN: ${{ github.token }}
+          # job 内没有 checkout,gh 需要显式指定仓库,否则会尝试从本地
+          # git remote 推断并报 "fatal: not a git repository"
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          branch="${{ github.head_ref || github.ref_name }}"
+          echo "Handling PR #$PR_NUMBER"
 
-          pr_number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')
-
-          if [ -z "$pr_number" ]; then
-            echo "No open PR found for branch '$branch', skipping auto-merge"
-            exit 0
-          fi
-
-          echo "Merging PR #$pr_number (branch: $branch)"
-
-          # Try each merge method in order; fall back to enabling auto-merge if checks are still pending
+          # Try each merge method in order; fall back to enabling auto-merge
+          # if required checks are still pending
+          # (--delete-branch 需要本地 git 仓库,Dependabot 合并后会自行删分支,故省略)
           for method in squash merge rebase; do
-            if gh pr merge "$pr_number" --$method --delete-branch; then
-              echo "PR #$pr_number merged with --$method"
+            if gh pr merge "$PR_NUMBER" --$method; then
+              echo "PR #$PR_NUMBER merged with --$method"
               exit 0
             fi
           done
 
-          if gh pr merge "$pr_number" --auto --squash; then
-            echo "Auto-merge enabled for PR #$pr_number (will merge when checks pass)"
+          if gh pr merge "$PR_NUMBER" --auto --squash; then
+            echo "Auto-merge enabled for PR #$PR_NUMBER (will merge when checks pass)"
           else
-            echo "::warning::Could not merge PR #$pr_number (it may have conflicts or unmet requirements)"
+            echo "::warning::Could not merge PR #$PR_NUMBER (it may have conflicts or unmet requirements)"
           fi
+
+  rename-version-dir:
+    name: Sync app version dir after merge
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 1
+
+      - name: Configure git
+        run: |
+          git config --local user.email "githubaction@githubaction.com"
+          git config --local user.name "github-action update-app-version"
+
+      - name: Run dependabot-app-version.sh on merged files
+        env:
+          FILES_JSON: ${{ toJSON(github.event.pull_request.files.*.filename) }}
+        run: |
+          echo "$FILES_JSON" | jq -r '.[]' | while read -r file; do
+            case "$file" in
+              *"docker-compose.yml")
+                app_name=$(echo "$file" | cut -d'/' -f 2)
+                old_version=$(echo "$file" | cut -d'/' -f 3)
+                chmod +x .github/workflows/dependabot-app-version.sh
+                .github/workflows/dependabot-app-version.sh "$app_name" "$old_version"
+                ;;
+            esac
+          done
+
+      - name: Commit & Push Changes
+        env:
+          FILES_JSON: ${{ toJSON(github.event.pull_request.files.*.filename) }}
+        run: |
+          echo "$FILES_JSON" | jq -r '.[]' | while read -r file; do
+            case "$file" in
+              *"docker-compose.yml")
+                app_name=$(echo "$file" | cut -d'/' -f 2)
+                git add "apps/$app_name"
+                ;;
+            esac
+          done
+
+          if git diff --cached --quiet; then
+            echo "No version dir renames to commit"
+          else
+            git commit -m "Update app version [skip ci]" --no-verify
+            git push
+          fi
+
