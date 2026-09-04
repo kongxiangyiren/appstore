@@ -1,14 +1,14 @@
-name: Update app version in Renovate Branches
+name: Dependabot app version sync
 permissions:
   contents: write
   pull-requests: write
 on:
   push:
-    branches: [ 'renovate/*' ]
+    branches: [ 'dependabot/*' ]
   workflow_dispatch:
     inputs:
       manual-trigger:
-        description: 'Manually trigger Renovate'
+        description: 'Manually trigger Dependabot'
         default: ''
 jobs:
   update-app-version:
@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | tr '\n' ' ')"
 
-      - name: Run renovate-app-version.sh on updated files
+      - name: Run dependabot-app-version.sh on merged files
         run: |
           IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
 
@@ -37,8 +37,8 @@ jobs:
             if [[ $file == *"docker-compose.yml"* ]]; then
               app_name=$(echo $file | cut -d'/' -f 2)
               old_version=$(echo $file | cut -d'/' -f 3)
-              chmod +x .github/workflows/renovate-app-version.sh
-              .github/workflows/renovate-app-version.sh $app_name $old_version
+              chmod +x .github/workflows/dependabot-app-version.sh
+              .github/workflows/dependabot-app-version.sh $app_name $old_version
             fi
           done
 
@@ -53,8 +53,8 @@ jobs:
             fi
           done
 
-      - name: Auto-merge Renovate PR
-        if: startsWith(github.ref, 'refs/heads/renovate/')
+      - name: Auto-merge Dependabot PR
+        if: startsWith(github.ref, 'refs/heads/dependabot/')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
