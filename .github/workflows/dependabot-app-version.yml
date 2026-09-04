@@ -62,11 +62,21 @@ jobs:
           git config --local user.email "githubaction@githubaction.com"
           git config --local user.name "github-action update-app-version"
 
-      - name: Run dependabot-app-version.sh on merged files
+      # pull_request_target 事件的 webhook payload 不包含 files 列表
+      # (toJSON(github.event.pull_request.files.*.filename) 只会得到 []),
+      # 必须通过 REST API 获取合并 PR 的实际变更文件
+      - name: Get changed files from merged PR
         env:
-          FILES_JSON: ${{ toJSON(github.event.pull_request.files.*.filename) }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "$FILES_JSON" | jq -r '.[]' | while read -r file; do
+          gh api "repos/$GH_REPO/pulls/$PR_NUMBER/files" --paginate --jq '.[].filename' > changed-files.txt
+          cat changed-files.txt
+
+      - name: Run dependabot-app-version.sh on merged files
+        run: |
+          while read -r file; do
             case "$file" in
               *"docker-compose.yml")
                 app_name=$(echo "$file" | cut -d'/' -f 2)
@@ -75,20 +85,18 @@ jobs:
                 .github/workflows/dependabot-app-version.sh "$app_name" "$old_version"
                 ;;
             esac
-          done
+          done < changed-files.txt
 
       - name: Commit & Push Changes
-        env:
-          FILES_JSON: ${{ toJSON(github.event.pull_request.files.*.filename) }}
         run: |
-          echo "$FILES_JSON" | jq -r '.[]' | while read -r file; do
+          while read -r file; do
             case "$file" in
               *"docker-compose.yml")
                 app_name=$(echo "$file" | cut -d'/' -f 2)
                 git add "apps/$app_name"
                 ;;
             esac
-          done
+          done < changed-files.txt
 
           if git diff --cached --quiet; then
             echo "No version dir renames to commit"
