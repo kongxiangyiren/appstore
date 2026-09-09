@@ -47,9 +47,12 @@ jobs:
   rename-version-dir:
     name: Sync app version dir after merge
     runs-on: ubuntu-latest
+    # 注意:pull_request_target 的 closed 事件 payload 中 pull_request.merged
+    # 字段可能为 false(即使 PR 实际已合并,尤其是通过 API 合并时)。
+    # 因此这里只判断 action == 'closed',是否真正合并交给后续步骤查 API 确认。
     if: >-
       github.event.action == 'closed' &&
-      github.event.pull_request.merged == true
+      startsWith(github.event.pull_request.head.ref, 'dependabot/')
     steps:
       - name: Checkout base branch
         uses: actions/checkout@v7
@@ -62,15 +65,24 @@ jobs:
           git config --local user.email "githubaction@githubaction.com"
           git config --local user.name "github-action update-app-version"
 
-      # pull_request_target 事件的 webhook payload 不包含 files 列表
-      # (toJSON(github.event.pull_request.files.*.filename) 只会得到 []),
-      # 必须通过 REST API 获取合并 PR 的实际变更文件
-      - name: Get changed files from merged PR
+      # 通过 REST API 确认 PR 确实被合并(而非关闭),并获取实际变更文件列表。
+      # pull_request_target 的 webhook payload 不包含 files,merged 也可能为 false。
+      - name: Check merged & get changed files
+        id: changed-files
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
+          state=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.state')
+          merged=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.merged')
+          echo "state=$state merged=$merged"
+
+          if [ "$state" != "closed" ] || [ "$merged" != "true" ]; then
+            echo "PR #$PR_NUMBER was not merged (state=$state, merged=$merged); skipping"
+            exit 0
+          fi
+
           gh api "repos/$GH_REPO/pulls/$PR_NUMBER/files" --paginate --jq '.[].filename' > changed-files.txt
           cat changed-files.txt
 
