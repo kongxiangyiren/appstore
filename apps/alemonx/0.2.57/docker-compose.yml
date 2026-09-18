@@ -1,0 +1,39 @@
+services:
+  alx:
+    image: ccr.ccs.tencentyun.com/ningmengchongshui/alemonx:v0.2.57
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - ${PANEL_APP_PORT_HTTP}:17390
+    environment:
+      TZ: ${TZ}
+      HOME: /root
+      XDG_CONFIG_HOME: /root/config
+      XDG_CACHE_HOME: /root/cache
+      ALX_DEPLOYMENT: production
+      ALX_OPS_STORAGE: sqlite
+      ALX_CONTAINER: '1'
+      ALX_WORKSPACE: /app/workspace
+      ALEMONJS_SETUP_ROOTS: /app/workspace
+      ALX_PRIVILEGED_MODE: enabled
+      # Optional GitHub proxy settings consumed by system-plugin release downloads.
+      # Keep empty by default; operators may set them in .env when GitHub is rate-limited.
+      # ALX_PLUGIN_GITHUB_API_MIRROR: ${ALX_PLUGIN_GITHUB_API_MIRROR}
+      # ALX_PLUGIN_DOWNLOAD_MIRRORS: ${ALX_PLUGIN_DOWNLOAD_MIRRORS}
+      # SnowLuma 默认关闭；只有显式叠加高权限覆盖文件才会启用。
+      ALX_SNOWLUMA_ENABLED: 0
+    volumes:
+      - ./data:/root
+      - ./workspace:/app/workspace
+    shm_size: '1gb'
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:17390/healthz >/dev/null']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - 1panel-network
+networks:
+  1panel-network:
+    external: true
