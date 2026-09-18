@@ -1,6 +1,7 @@
 name: Update app version in Renovate Branches
 permissions:
   contents: write
+  pull-requests: write
 
 on:
   push:
@@ -52,3 +53,62 @@ jobs:
               git add "apps/$app_name/*" && git commit -m "Update app version [skip ci]" --no-verify && git push || true
             fi
           done
+
+      - name: Auto-merge the Renovate PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          # Renovate pushes the branch right before opening the PR, so wait for it to show up.
+          pr_number=""
+          for attempt in $(seq 1 12); do
+            pr_number=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open \
+              --json number --jq '.[0].number')
+            if [[ -n "$pr_number" ]]; then
+              break
+            fi
+            echo "Attempt $attempt: no open pull request for $BRANCH yet, retrying..."
+            sleep 10
+          done
+
+          if [[ -z "$pr_number" ]]; then
+            echo "No open pull request for branch $BRANCH, nothing to merge."
+            exit 0
+          fi
+
+          echo "Found open pull request #$pr_number for branch $BRANCH"
+
+          # GitHub computes mergeability asynchronously, so poll until it is known.
+          mergeable="UNKNOWN"
+          for attempt in $(seq 1 10); do
+            mergeable=$(gh pr view "$pr_number" --repo "$REPO" --json mergeable --jq '.mergeable')
+            echo "Attempt $attempt: mergeable=$mergeable"
+            if [[ "$mergeable" != "UNKNOWN" ]]; then
+              break
+            fi
+            sleep 5
+          done
+
+          if [[ "$mergeable" == "CONFLICTING" ]]; then
+            echo "::warning::Pull request #$pr_number has merge conflicts, leaving it for manual resolution."
+            exit 0
+          fi
+
+          # Try the merge methods available in this repository, most explicit first.
+          last_error=""
+          for method in --merge --squash; do
+            if last_error=$(gh pr merge "$pr_number" --repo "$REPO" $method 2>&1); then
+              echo "Merged pull request #$pr_number using $method"
+              exit 0
+            fi
+            echo "::notice::$method did not work: $last_error"
+          done
+
+          # Last resort: let GitHub merge the PR once any required checks pass.
+          # This needs the repository setting "Allow auto-merge" to be enabled.
+          if last_error=$(gh pr merge "$pr_number" --repo "$REPO" --merge --auto 2>&1); then
+            echo "Auto-merge enabled for pull request #$pr_number"
+          else
+            echo "::warning::Could not merge pull request #$pr_number automatically. Enable 'Allow auto-merge' in the repository settings, or merge it manually. Reason: $last_error"
+          fi
