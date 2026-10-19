@@ -29,6 +29,10 @@
     {
       "matchFileNames": ["apps/act_runner/0.*/*.yml"],
       "allowedVersions": "/^0.*/"
+    },
+    {
+      "matchFileNames": ["apps/magpie/0.*/*.yml"],
+      "allowedVersions": "/^0\\.1\\.\\d+$/"
     }
   ],
   "prCreation": "immediate"

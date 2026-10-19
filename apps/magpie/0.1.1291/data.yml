@@ -1,0 +1,100 @@
+additionalProperties:
+  formFields:
+    - default: 3430
+      edit: true
+      envKey: PANEL_APP_PORT_HTTP
+      labelEn: Web UI Port
+      labelZh: Web UI 端口
+      label:
+        en: Web UI Port
+        es-es: Puerto web
+        ja: Web UI ポート
+        ms: Port Web UI
+        pt-br: Porta WebUI
+        ru: Порт WebUI
+        ko: WebUI 포트
+        zh-Hant: WebUI 埠
+        zh: WebUI 端口
+        tr: WebUI portu
+      required: true
+      rule: paramPort
+      type: number
+    - default: 3425
+      edit: true
+      envKey: PANEL_APP_PORT_GATEWAY
+      labelEn: Gateway Port
+      labelZh: 网关端口
+      label:
+        en: Gateway Port
+        es-es: Puerto de puerta de enlace
+        ja: ゲートウェイポート
+        ms: Port Gerbang
+        pt-br: Porta do gateway
+        ru: Порт шлюза
+        ko: 게이트웨이 포트
+        zh-Hant: 閘道埠
+        zh: 网关端口
+        tr: Ağ geçidi bağlantı noktası
+      required: true
+      rule: paramPort
+      type: number
+    - default: magpie-web-key
+      edit: true
+      envKey: MAGPIE_WEB_KEY
+      labelEn: Web UI Key
+      labelZh: Web UI 访问密钥
+      label:
+        en: Web UI Key
+        es-es: Clave de la interfaz web
+        ja: Web UI キー
+        ms: Kunci Web UI
+        pt-br: Chave da interface web
+        ru: Ключ веб-интерфейса
+        ko: 웹 UI 키
+        zh-Hant: Web UI 金鑰
+        zh: Web UI 密钥
+        tr: Web UI anahtarı
+      description:
+        en: At least 16 characters, letters, digits and - . _ ~ only. Keeps the browser signed in across restarts.
+        es-es: Al menos 16 caracteres, solo letras, dígitos y - . _ ~. Mantiene la sesión del navegador entre reinicios.
+        ja: 16 文字以上、英数字と - . _ ~ のみ。再起動してもブラウザーのサインインを維持します。
+        ms: Sekurang-kurangnya 16 aksara, huruf, digit dan - . _ ~ sahaja. Mengekalkan log masuk pelayar selepas mula semula.
+        pt-br: Pelo menos 16 caracteres, apenas letras, dígitos e - . _ ~. Mantém o navegador conectado entre reinicializações.
+        ru: Не менее 16 символов, только буквы, цифры и - . _ ~. Сохраняет вход в браузере между перезапусками.
+        ko: 16자 이상, 영문자, 숫자 및 - . _ ~ 만 사용합니다. 재시작 후에도 브라우저 로그인을 유지합니다.
+        zh-Hant: 至少 16 個字元，僅限英文字母、數字與 - . _ ~。重新啟動後仍保持瀏覽器登入狀態。
+        zh: 至少 16 个字符，仅限英文字母、数字与 - . _ ~。重启后仍保持浏览器登录状态。
+        tr: En az 16 karakter, yalnızca harf, rakam ve - . _ ~. Yeniden başlatmalarda tarayıcı oturumunu korur.
+      random: true
+      required: true
+      rule: paramComplexity
+      type: password
+    - default: ''
+      edit: true
+      envKey: MAGPIE_PUBLIC_URL
+      labelEn: Public URL
+      labelZh: 公开地址
+      label:
+        en: Public URL
+        es-es: URL pública
+        ja: 公開 URL
+        ms: URL awam
+        pt-br: URL pública
+        ru: Публичный URL
+        ko: 공개 URL
+        zh-Hant: 公開網址
+        zh: 公开地址
+        tr: Genel URL
+      description:
+        en: Optional. The address other machines reach the gateway at, such as http://192.168.1.20:3425. Leave empty to use the detected address.
+        es-es: Opcional. La dirección por la que otras máquinas alcanzan la puerta de enlace, por ejemplo http://192.168.1.20:3425. Déjelo vacío para usar la dirección detectada.
+        ja: 任意。他のマシンがゲートウェイに到達するアドレス（例 http://192.168.1.20:3425）。空欄の場合は自動検出されたアドレスを使用します。
+        ms: Pilihan. Alamat yang digunakan mesin lain untuk mencapai gerbang, contohnya http://192.168.1.20:3425. Biarkan kosong untuk menggunakan alamat yang dikesan.
+        pt-br: Opcional. O endereço pelo qual outras máquinas alcançam o gateway, como http://192.168.1.20:3425. Deixe vazio para usar o endereço detectado.
+        ru: Необязательно. Адрес, по которому другие машины обращаются к шлюзу, например http://192.168.1.20:3425. Оставьте пустым, чтобы использовать определённый адрес.
+        ko: "선택 사항입니다. 다른 컴퓨터가 게이트웨이에 접속하는 주소입니다(예: http://192.168.1.20:3425). 비워 두면 자동 감지된 주소를 사용합니다."
+        zh-Hant: 選填。其他機器存取閘道所用的位址，例如 http://192.168.1.20:3425。留空則使用自動偵測到的位址。
+        zh: 选填。其他机器访问网关所用的地址，例如 http://192.168.1.20:3425。留空则使用自动检测到的地址。
+        tr: İsteğe bağlı. Diğer makinelerin ağ geçidine eriştiği adres, örneğin http://192.168.1.20:3425. Boş bırakılırsa algılanan adres kullanılır.
+      required: false
+      type: text
