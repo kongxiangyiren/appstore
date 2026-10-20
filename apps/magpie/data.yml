@@ -12,7 +12,7 @@ additionalProperties:
     - Tool
   shortDescZh: 把任意模型接到任意 AI 编码代理的本地网关
   shortDescEn: A local gateway that puts any model behind any coding agent
-  type: tool
+  type: website
   crossVersionUpdate: true
   limit: 0
   website: https://usemagpie.ai
@@ -31,4 +31,4 @@ additionalProperties:
     pt-br: Magpie é um gateway de IA local que conecta Claude Code, Codex, Gemini CLI e outros agentes de código a qualquer provedor de modelos, passando para a próxima conta quando a cota acaba.
     ru: Magpie — локальный AI-шлюз, который подключает Claude Code, Codex, Gemini CLI и других агентов к любому поставщику моделей и переключается на следующую учётную запись, когда заканчивается квота.
     ko: Magpie는 Claude Code, Codex, Gemini CLI 등 코딩 에이전트를 원하는 모델 공급자에 연결하는 로컬 AI 게이트웨이로, 할당량이 소진되면 다음 계정으로 자동 전환합니다.
-    tr: Magpie, herhangi bir modeli herhangi bir kodlama ajanının arkasına koyan yerel bir yapay zeka ağ geçididir; OpenAI, Anthropic ve Gemini API'leri arasında çeviri yapar ve kota tükendiğinde bir sonraki hesaba geçer. 
+    tr: Magpie, herhangi bir modeli herhangi bir kodlama ajanının arkasına koyan yerel bir yapay zeka ağ geçididir; OpenAI, Anthropic ve Gemini API'leri arasında çeviri yapar ve kota tükendiğinde bir sonraki hesaba geçer.
