@@ -1,6 +1,6 @@
 services:
   magpie:
-    image: ghcr.io/yetone/magpie:0.1.1317
+    image: ghcr.io/yetone/magpie:0.1.1318
     container_name: ${CONTAINER_NAME}
     restart: always
     command:
