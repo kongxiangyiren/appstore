@@ -24,8 +24,7 @@
     {
       "matchFileNames": ["apps/act_runner/5.*/*.yml"],
       "versioning": "docker",
-      "allowedVersions": ">=5.0.0 <6.0.0",
-      "automerge": false
+      "allowedVersions": ">=5.0.0 <6.0.0"
     },
     {
       "matchFileNames": ["apps/magpie/0.*/*.yml"],
