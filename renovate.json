@@ -2,17 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
-  "mode": "full",
-  "automerge": true,
   "rebaseWhen": "never",
+  "prCreation": "immediate",
   "packageRules": [
     {
       "matchPackageNames": ["github-actions"],
       "enabled": false
-    },
-    {
-      "matchDatasources": ["docker"],
-      "registryUrls": ["https://docker.1ms.run/"]
     },
     {
       "matchPackageNames": ["docker-compose"],
@@ -27,13 +22,14 @@
       "allowedVersions": "/^2.*/"
     },
     {
-      "matchFileNames": ["apps/act_runner/0.*/*.yml"],
-      "allowedVersions": "/^0.*/"
+      "matchFileNames": ["apps/act_runner/5.*/*.yml"],
+      "versioning": "docker",
+      "allowedVersions": ">=5.0.0 <6.0.0",
+      "automerge": false
     },
     {
       "matchFileNames": ["apps/magpie/0.*/*.yml"],
       "allowedVersions": "/^0\\.1\\.\\d+$/"
     }
-  ],
-  "prCreation": "immediate"
+  ]
 }

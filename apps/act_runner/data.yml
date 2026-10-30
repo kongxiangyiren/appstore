@@ -14,6 +14,6 @@ additionalProperties:
     crossVersionUpdate: true
     limit: 0
     recommend: 0
-    website: https://gitea.com/gitea/act_runner
-    github: https://gitea.com/gitea/act_runner
-    document: https://docs.gitea.com/next/usage/actions/act-runner
+    website: https://gitea.com/gitea/runner
+    github: https://gitea.com/gitea/runner
+    document: https://docs.gitea.com/runner/
