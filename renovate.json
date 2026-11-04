@@ -4,6 +4,8 @@
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "prCreation": "immediate",
+  "dependencyDashboard": true,
+  "mode": "full",
   "packageRules": [
     {
       "matchPackageNames": ["github-actions"],
