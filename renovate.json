@@ -9,7 +9,7 @@
   "mode": "full",
   "packageRules": [
     {
-      "matchPackageNames": ["github-actions"],
+      "matchManagers": ["github-actions"],
       "enabled": false
     },
     {
