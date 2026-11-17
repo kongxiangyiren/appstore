@@ -23,9 +23,9 @@
       "allowedVersions": "/^2.*/"
     },
     {
-      "matchFileNames": ["apps/act_runner/5.*/*.yml"],
+      "matchFileNames": ["apps/act_runner/**/*.yml"],
       "versioning": "docker",
-      "allowedVersions": ">=5.0.0 <6.0.0"
+      "allowedVersions": ">=6.0.0 <7.0.0"
     }
   ]
 }
